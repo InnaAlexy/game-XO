@@ -3,10 +3,15 @@
 
 import { InformationLayout } from './InformationLayout';
 
-export const InformationContainer = () => {
+export const InformationContainer = ({ winner, isDraw, isGameEnded, currentPlayer }) => {
 	return (
 		<>
-			<InformationLayout />
+			<InformationLayout
+				winner={winner}
+				isDraw={isDraw}
+				isGameEnded={isGameEnded}
+				currentPlayer={currentPlayer}
+			/>
 		</>
 	);
 };

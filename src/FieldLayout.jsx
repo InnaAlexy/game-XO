@@ -1,11 +1,15 @@
 import style from './FieldLayout.module.css';
 
-export const FieldLayout = ({ arrayOfSquare, handleClick }) => {
+export const FieldLayout = ({ field, handleClick }) => {
 	return (
 		<div className={style.spaceForSquare}>
-			{arrayOfSquare.map((item, index) => (
-				<button key={index} className={style.square} onClick={handleClick}>
-					{' '}
+			{field.map((item, index) => (
+				<button
+					key={index}
+					id={index}
+					className={style.square}
+					onClick={handleClick}
+				>
 					{item}
 				</button>
 			))}

@@ -1,8 +1,14 @@
-export const InformationLayout = () => {
+export const InformationLayout = ({ winner, isDraw, isGameEnded, currentPlayer }) => {
 	return (
 		<>
-			<div> Сейчас ход:</div>
-			<div> Победитель: </div>
+			<div>
+				{' '}
+				{isDraw
+					? 'Ничья'
+					: isGameEnded
+						? `Победа: ${currentPlayer}`
+						: `Ход:  ${currentPlayer}`}
+			</div>
 		</>
 	);
 };
