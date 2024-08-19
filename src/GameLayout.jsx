@@ -1,36 +1,25 @@
-import { InformationContainer } from './InformationContainer';
-import { FieldContainer } from './FieldContainer';
-import style from './GameLayout.module.css';
+import React from 'react';
+import FieldsLayout from './FieldsLayout';
+import Info from './Info';
+import styles from './GameLayout.module.css';
 
-export function GameLayout({
-	winner,
-	setField,
-	currentPlayer,
-	isGameEnded,
+const GameLayout = ({
 	isDraw,
-	setCurrentPlayer,
-	setIsGameEnded,
-	setIsDraw,
-	field,
-}) {
+	status,
+	currentPlayer,
+	fields,
+	handleClick,
+	gameRestart,
+}) => {
 	return (
-		<div className={style.game}>
-			<InformationContainer
-				winner={winner}
-				isDraw={isDraw}
-				isGameEnded={isGameEnded}
-				currentPlayer={currentPlayer}
-			/>
-			<FieldContainer
-				winner={winner}
-				setIsGameEnded={setIsGameEnded}
-				isGameEnded={isGameEnded}
-				field={field}
-				currentPlayer={currentPlayer}
-				setCurrentPlayer={setCurrentPlayer}
-				setField={setField}
-			/>
-			<button> Начать заново </button>
+		<div>
+			<Info isDraw={isDraw} status={status} currentPlayer={currentPlayer} />
+			<FieldsLayout fields={fields} handleClick={handleClick} />
+			<button onClick={gameRestart} className={styles.button}>
+				Начать заново
+			</button>
 		</div>
 	);
-}
+};
+
+export default GameLayout;
