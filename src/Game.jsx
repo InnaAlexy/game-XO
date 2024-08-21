@@ -45,9 +45,6 @@ const Game = () => {
 
 		if (fields[index] === '') {
 			newFields[index] = currentPlayer;
-			if (newFields.every((field) => field !== '')) {
-				setIsDraw(true);
-			}
 
 			setFields(newFields);
 
@@ -55,6 +52,11 @@ const Game = () => {
 				setStatus(true);
 				return;
 			}
+
+			if (newFields.every((field) => field !== '')) {
+				setIsDraw(true);
+			}
+
 			setCurrentPlayer((prevState) =>
 				prevState === PLAYER.crosses ? PLAYER.noughts : PLAYER.crosses,
 			);
