@@ -1,17 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import style from './Field.module.css';
 import { store } from '../../store';
 import { checkWinner } from '../../utils/checkWinner';
 import { PLAYER } from '../../constants/constants';
 
-const Field = ({ field, index }) => {
-	const [state, setState] = useState(store.getState());
-
-	useEffect(() => {
-		const unsubscribe = store.subscribe(() => setState(store.getState()));
-		return () => unsubscribe();
-	}, []);
-
+const Field = ({ state, field, index }) => {
 	const { currentPlayer, status, fields } = state;
 
 	const handleClick = (index) => {

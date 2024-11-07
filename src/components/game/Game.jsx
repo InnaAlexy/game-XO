@@ -12,7 +12,7 @@ const Game = () => {
 
 	return (
 		<div>
-			<GameLayout />
+			<GameLayout state={state} />
 		</div>
 	);
 };

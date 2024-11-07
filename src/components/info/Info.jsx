@@ -1,15 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import style from './Info.module.css';
-import { store } from '../../store';
 
-const Info = () => {
-	const [state, setState] = useState(store.getState());
-
-	useEffect(() => {
-		const unsubscribe = store.subscribe(() => setState(store.getState()));
-		return () => unsubscribe();
-	}, []);
-
+const Info = ({ state }) => {
 	const { currentPlayer, isDraw, status } = state;
 
 	return (
