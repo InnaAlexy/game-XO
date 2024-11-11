@@ -1,14 +1,15 @@
 import React from 'react';
 import Field from './Field';
 import style from './FieldsLayout.module.css';
+import { useSelector } from 'react-redux';
 
-const FieldsLayout = ({ state }) => {
-	const { fields } = state;
+const FieldsLayout = () => {
+	const fields = useSelector((store) => store.fields);
 
 	return (
 		<div className={style.FieldsLayout}>
 			{fields.map((field, index) => (
-				<Field key={index} field={field} index={index} state={state} />
+				<Field key={index} index={index} field={field} />
 			))}
 		</div>
 	);

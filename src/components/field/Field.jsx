@@ -1,11 +1,16 @@
 import React from 'react';
 import style from './Field.module.css';
-import { store } from '../../store';
 import { checkWinner } from '../../utils/checkWinner';
 import { PLAYER } from '../../constants/constants';
+import { useDispatch, useSelector } from 'react-redux';
+import { setCurrentPlayer, setFields, setIsDraw, setStatus } from '../../actions';
 
-const Field = ({ state, field, index }) => {
-	const { currentPlayer, status, fields } = state;
+const Field = ({ index, field }) => {
+	const currentPlayer = useSelector((store) => store.currentPlayer);
+	const status = useSelector((store) => store.status);
+	const fields = useSelector((store) => store.fields);
+
+	const dispatch = useDispatch();
 
 	const handleClick = (index) => {
 		if (status) {
@@ -16,26 +21,19 @@ const Field = ({ state, field, index }) => {
 		if (fields[index] === '') {
 			newFields[index] = currentPlayer;
 
-			store.dispatch({ type: 'SET_FIELDS', payload: newFields });
+			dispatch(setFields(newFields));
 
 			if (checkWinner(newFields, currentPlayer)) {
-				store.dispatch({ type: 'SET_STATUS', payload: true });
+				dispatch(setStatus(true));
 				return;
 			}
 
 			if (newFields.every((field) => field !== '')) {
-				store.dispatch({ type: 'SET_IS_DRAW', payload: true });
+				dispatch(setIsDraw(true));
 			}
 			if (currentPlayer === PLAYER.crosses) {
-				store.dispatch({
-					type: 'SET_CURRENT_PLAYER',
-					payload: PLAYER.noughts,
-				});
-			} else
-				store.dispatch({
-					type: 'SET_CURRENT_PLAYER',
-					payload: PLAYER.crosses,
-				});
+				dispatch(setCurrentPlayer(PLAYER.noughts));
+			} else dispatch(setCurrentPlayer(PLAYER.crosses));
 		}
 	};
 

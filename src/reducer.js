@@ -7,33 +7,30 @@ export const initialState = {
 	isDraw: false,
 };
 
-export const AppReduser = (state = initialState, action) => {
-	const { type, payload } = action;
-
-	switch (type) {
+export const reducer = (state = initialState, action) => {
+	switch (action.type) {
 		case 'SET_CURRENT_PLAYER':
 			return {
 				...state,
-				currentPlayer: payload,
+				currentPlayer: action.payload,
 			};
 		case 'SET_FIELDS':
 			return {
 				...state,
-				fields: payload,
+				fields: action.payload,
 			};
 		case 'SET_STATUS':
 			return {
 				...state,
-				status: payload,
+				status: action.payload,
 			};
 		case 'SET_IS_DRAW':
 			return {
 				...state,
-				isDraw: payload,
+				isDraw: action.payload,
 			};
 		case 'RESTART_GAME':
 			return initialState;
-
 		default:
 			return state;
 	}
