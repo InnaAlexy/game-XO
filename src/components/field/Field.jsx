@@ -1,47 +1,68 @@
-import React from 'react';
-import style from './Field.module.css';
-import { checkWinner } from '../../utils/checkWinner';
-import { PLAYER } from '../../constants/constants';
-import { useDispatch, useSelector } from 'react-redux';
-import { setCurrentPlayer, setFields, setIsDraw, setStatus } from '../../actions';
+import { connect } from 'react-redux';
+import { WIN_PATTERNS } from '../../constants/winPatterns';
+import FieldLayout from './FieldsLayout';
+import { checkDraw, containsPattern } from '../../utils';
+import { setField, SET_CURRENT_PLAYER, SET_GAME_END, SET_IS_DRAW } from '../../actions';
+import {
+	selectCurrentPlayer,
+	selectField,
+	selectIsDraw,
+	selectIsGameEnded,
+} from '../../selectors';
+import { Component } from 'react';
 
-const Field = ({ index, field }) => {
-	const currentPlayer = useSelector((store) => store.currentPlayer);
-	const status = useSelector((store) => store.status);
-	const fields = useSelector((store) => store.fields);
+class Field extends Component {
+	constructor(props) {
+		super(props);
+		this.handleClick = this.handleClick.bind(this);
+	}
 
-	const dispatch = useDispatch();
+	handleClick(i) {
+		const {
+			field,
+			currentPlayer,
+			isGameEnded,
+			isDraw,
+			setField,
+			SET_IS_DRAW,
+			SET_GAME_END,
+			SET_CURRENT_PLAYER,
+		} = this.props;
+		const updatedField = [...field];
+		if (isGameEnded || isDraw || updatedField[i]) return;
 
-	const handleClick = (index) => {
-		if (status) {
-			return;
+		updatedField[i] = currentPlayer;
+		setField(updatedField);
+
+		const isWin = containsPattern(WIN_PATTERNS, updatedField, currentPlayer);
+		if (checkDraw(updatedField)) {
+			SET_IS_DRAW();
 		}
-		const newFields = fields.slice();
-
-		if (fields[index] === '') {
-			newFields[index] = currentPlayer;
-
-			dispatch(setFields(newFields));
-
-			if (checkWinner(newFields, currentPlayer)) {
-				dispatch(setStatus(true));
-				return;
-			}
-
-			if (newFields.every((field) => field !== '')) {
-				dispatch(setIsDraw(true));
-			}
-			if (currentPlayer === PLAYER.crosses) {
-				dispatch(setCurrentPlayer(PLAYER.noughts));
-			} else dispatch(setCurrentPlayer(PLAYER.crosses));
+		if (isWin) {
+			SET_GAME_END();
+		} else {
+			SET_CURRENT_PLAYER();
 		}
-	};
+	}
 
-	return (
-		<div className={style.Field} onClick={() => handleClick(index)}>
-			{field}
-		</div>
-	);
-};
+	render() {
+		const { field } = this.props;
+		return <FieldLayout field={field} handleClick={this.handleClick} />;
+	}
+}
 
-export default Field;
+const mapStateToProps = (state) => ({
+	currentPlayer: selectCurrentPlayer(state),
+	isGameEnded: selectIsGameEnded(state),
+	isDraw: selectIsDraw(state),
+	field: selectField(state),
+});
+
+const mapDispatchToProps = (dispatch) => ({
+	setField: (updatedField) => dispatch(setField(updatedField)),
+	SET_CURRENT_PLAYER: () => dispatch(SET_CURRENT_PLAYER),
+	SET_GAME_END: () => dispatch(SET_GAME_END),
+	SET_IS_DRAW: () => dispatch(SET_IS_DRAW),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Field);

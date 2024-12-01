@@ -1,36 +1,34 @@
-import { PLAYER } from './constants/constants';
-
-export const initialState = {
-	fields: Array(9).fill(''),
-	currentPlayer: PLAYER.crosses,
-	status: false,
+const initialState = {
+	currentPlayer: '❌',
+	isGameEnded: false,
 	isDraw: false,
+	field: ['', '', '', '', '', '', '', '', ''],
 };
 
-export const reducer = (state = initialState, action) => {
-	switch (action.type) {
+export const reducer = (state = initialState, { type, payload }) => {
+	switch (type) {
 		case 'SET_CURRENT_PLAYER':
 			return {
 				...state,
-				currentPlayer: action.payload,
+				currentPlayer: state.currentPlayer === '❌' ? '⭕' : '❌',
 			};
-		case 'SET_FIELDS':
+		case 'SET_FIELD':
 			return {
 				...state,
-				fields: action.payload,
-			};
-		case 'SET_STATUS':
-			return {
-				...state,
-				status: action.payload,
-			};
-		case 'SET_IS_DRAW':
-			return {
-				...state,
-				isDraw: action.payload,
+				field: payload,
 			};
 		case 'RESTART_GAME':
 			return initialState;
+		case 'SET_IS_DRAW':
+			return {
+				...state,
+				isDraw: true,
+			};
+		case 'SET_GAME_END':
+			return {
+				...state,
+				isGameEnded: true,
+			};
 		default:
 			return state;
 	}

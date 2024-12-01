@@ -1,4 +1,4 @@
-export const setFields = (delta) => ({
-	type: 'SET_FIELDS',
-	payload: delta,
+export const setField = (field) => ({
+	type: 'SET_FIELD',
+	payload: field,
 });
